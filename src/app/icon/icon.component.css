@@ -1,0 +1,17 @@
+:host {
+  --size: 1em;
+  --color: #212121;
+  font-size: var(--size, '1em');
+  color: var(--color, #212121);
+}
+
+:host svg {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  width: var(--size);
+}
+
+:host svg path {
+  fill: currentColor;
+}

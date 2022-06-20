@@ -1,0 +1,260 @@
+@keyframes appear {
+  from {
+    opacity: 0;
+    visibility: 0;
+  }
+
+  to {
+    opacity: 1;
+    visibility: 1;
+  }
+}
+
+/* wrapper */
+
+:host {
+  --color-inactive: rgba(0, 0, 0, 0.15);
+  --color-active: darkgray;
+  --gutter: 0.25em;
+  --active: 0;
+  --item-height: 35px;
+  --item-gap: 2px;
+  --checkbox-width: 24px;
+  --checkbox-color: var(--color-active);
+  --trigger-width: min-content;
+  --trigger-height: 16px;
+  --bg-color: white;
+  --border-color: var(--color-inactive);
+  --placeholder-color: var(--color-inactive);
+
+  /* postition of the active item */
+  --offset: var(--active) * var(--item-height);
+  --positionY: calc(-1 * (var(--active) * var(--item-gap) + var(--offset)));
+  --positionX: calc(-1 * var(--gutter) - 1px);
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-inline-end: auto;
+  vertical-align: middle;
+  height: calc(var(--trigger-height) + var(--item-gap));
+  width: var(--trigger-width);
+
+  transform: translateY(-1px); /* micro adjustment */
+}
+
+:host.bottom ul li.active {
+  order: -1;
+}
+
+:host.bottom.open {
+  --positionY: 0px;
+  --positionX: calc(-1 * var(--gutter) - 1px);
+}
+
+/* list  */
+
+:host ul {
+  width: max-content;
+  position: relative;
+  display: grid;
+  align-self: start;
+  row-gap: var(--item-gap);
+  column-gap: var(--item-gap);
+  grid-template-columns: max-content;
+  margin: 0;
+  padding: 0 var(--item-gap);
+  list-style: none;
+
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--bg-color);
+}
+
+:host.open ul {
+  transform: translate(var(--positionX), var(--positionY));
+  margin-top: calc(-3 * var(--gutter) - var(--item-gap));
+}
+
+:host.open ul {
+  background-color: snow;
+  border-radius: 4px;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
+  padding: var(--gutter);
+}
+
+:host:not(.open) ul {
+  height: auto;
+  display: flex;
+  transform: translateY(
+    calc(-1 * (var(--item-height) - var(--trigger-height)) / 2)
+  );
+}
+
+:host:not(.open) ul li.active:hover,
+:host:not(.open) ul li.active:focus {
+  outline: 2px solid red;
+  border-color: red;
+}
+
+/* list item */
+
+:host li {
+  display: none;
+  min-height: var(--item-height);
+  animation: appear 0.3s ease-in-out;
+}
+
+:host.open li {
+  display: flex;
+  column-gap: 0.25em;
+  align-items: center;
+  padding: 0 var(--gutter);
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+:host li:hover,
+:host li:focus,
+:host li:focus-within {
+  background: var(--bg-color);
+  border-color: var(--color-active);
+  cursor: pointer;
+  /* outline: none; */
+}
+
+:host:not(.open):focus-within ul,
+:host(.open) li:focus-within {
+  outline: 2px solid var(--color-active);
+}
+
+/* chevron */
+
+:host li.chevron .icon {
+  opacity: 0.4;
+  margin: auto;
+}
+
+:host:not(.open):focus-within .chevron .icon,
+:host li.chevron:hover .icon,
+:host li:hover ~ .chevron .icon,
+:host li:focus-within .chevron .icon {
+  opacity: 1;
+}
+
+:host li.chevron {
+  display: grid;
+  align-items: center;
+  padding-inline-start: var(--gutter);
+  padding-inline-end: var(--gutter);
+  right: 0;
+  background-color: var(--bg-color);
+  color: var(--color-active);
+}
+
+:host.open li.chevron {
+  display: none;
+}
+
+/* item */
+
+:host li > button {
+  display: grid;
+  align-items: center;
+  padding-inline-start: calc(var(--gutter) / 2);
+  padding-inline-end: calc(var(--gutter) / 2);
+
+  color: #272727;
+  font-family: inherit;
+  font-size: 1em;
+  text-decoration: none;
+
+  border: none;
+  background-color: inherit;
+  text-align: start;
+  cursor: inherit;
+  outline: none;
+  /* took over with js */
+  pointer-events: none;
+}
+
+:host li:hover button,
+:host li button:focus {
+  color: black;
+}
+
+/* trigger */
+
+:host li.active {
+  display: flex;
+  align-items: center;
+}
+
+:host:not(:hover) li.active button {
+  color: black;
+}
+
+:host.open li.active .icon {
+  visibility: hidden;
+}
+
+:host li.active .icon {
+  --size: 12px;
+}
+
+:host:not(.open).multiple ul li.active button {
+  display: flex;
+  column-gap: var(--gutter);
+  border: 1px solid var(--color-inactive);
+  border-radius: var(--trigger-height);
+  height: calc(100% - var(--gutter));
+  padding-inline-start: calc(var(--gutter) * 2);
+  padding-inline-end: calc(var(--gutter) * 2);
+}
+
+:host.multiple ul li button app-icon {
+  --size: 0.75em;
+  --color: var(--color-active);
+}
+
+:host.open.multiple ul li button app-icon {
+  display: none;
+}
+
+:host:not(.open).multiple ul li.active button app-icon {
+  display: grid;
+  inset: 0;
+  padding-inline-start: calc(3 * var(--gutter));
+  padding-inline-end: var(--gutter);
+  border-inline-start: 1px solid var(--color-inactive);
+}
+
+/* checkbox */
+
+:host.open.multiple {
+  transform: translateX(calc(-1 * (var(--checkbox-width) / 2 + 0.25em)));
+}
+
+:host:not(.open).multiple li input[type='checkbox'] {
+  display: none;
+  width: var(--checkbox-width);
+}
+
+:host.open.multiple input[type='checkbox'] {
+  margin: 0;
+  accent-color: var(--checkbox-color);
+}
+
+:host:not(.open).multiple ul li.active .icon {
+  display: none;
+}
+
+/* empty */
+
+:host.empty.open li:first-child {
+  display: none;
+}
+
+:host.empty:not(.open) li:first-child button {
+  color: var(--placeholder-color);
+}

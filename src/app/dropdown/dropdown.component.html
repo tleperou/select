@@ -1,0 +1,45 @@
+<ul
+  #listEl
+  [attr.aria-activedescendant]="hover"
+  [attr.aria-multiselectable]="multiple"
+  role="listbox"
+>
+  <ng-container *ngIf="empty">
+    <li
+      [attr.aria-label]="placeholder"
+      [class.active]="true"
+      [class.hover]="false"
+      (click)="itemClicked(0, $event)"
+      role="option"
+    >
+      <button>{{ placeholder }}</button>
+    </li>
+  </ng-container>
+
+  <li
+    #itemEl
+    *ngFor="let item of model; index as i"
+    [attr.aria-label]="item.label"
+    [class.active]="isActive(i)"
+    [class.hover]="isHover(i)"
+    [tabindex]="!(show$ | async) ? '-1' : ''"
+    (click)="itemClicked(i, $event)"
+    role="option"
+  >
+    <input
+      *ngIf="multiple"
+      [checked]="isActive(i)"
+      type="checkbox"
+      tabindex="-1"
+    />
+    <button>{{ item.label }}<app-icon model="close"></app-icon></button>
+  </li>
+  <li
+    *ngIf="chevron"
+    (click)="itemClicked(activeToArray[0] || 0, $event)"
+    class="chevron"
+    aria-hidden="true"
+  >
+    <app-icon model="chevron-down" class="icon"></app-icon>
+  </li>
+</ul>

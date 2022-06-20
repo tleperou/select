@@ -1,0 +1,34 @@
+<h1>hvn-dropdown</h1>
+<p>A simple CSS navigation list dropdown alike.</p>
+
+<hr />
+
+<main>
+  <p>
+    Click
+    <app-dropdown
+      [active]="activeItems"
+      [model]="model"
+      [multiple]="true"
+      (select)="updateDropdown($event)"
+    ></app-dropdown>
+    or select with the keyboard.
+  </p>
+
+  <p>
+    curently:
+    <ng-container *ngFor="let active of currentItems; let last = last">
+      {{ active.label }} {{ !last ? ',' : '' }}
+    </ng-container>
+  </p>
+</main>
+
+<hr />
+
+<footer>
+  <ul>
+    <li>CSS centric</li>
+    <li>HTML oriented</li>
+    <li>Accessibility friendly</li>
+  </ul>
+</footer>

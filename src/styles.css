@@ -1,0 +1,17 @@
+html {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+:root {
+  --gutter: 1em;
+}
+
+main {
+  display: grid;
+}
